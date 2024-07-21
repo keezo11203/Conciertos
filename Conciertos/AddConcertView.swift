@@ -28,6 +28,14 @@ struct AddConcertView: View {
             Button("Save Concert") {
                 let newConcert = Concert(artist: artist, tourName: tourName, city: city, state: state, venue: venue, date: date)
                 viewModel.addConcert(newConcert)
+                
+                // Clear the form fields after saving
+                artist = ""
+                tourName = ""
+                city = ""
+                state = ""
+                venue = ""
+                date = Date()  // Reset to current date
             }
         }
         .navigationTitle("Add Concert")
