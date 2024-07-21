@@ -8,14 +8,24 @@
 import SwiftUI
 
 struct ContentView: View {
-    var body: some View {
-        Text("Hello, world!")
-            .padding()
-    }
-}
+    @StateObject var viewModel = ConcertsViewModel()
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
+    var body: some View {
+        TabView {
+            AddConcertView(viewModel: viewModel)
+                .tabItem {
+                    Label("Add", systemImage: "plus")
+                }
+            
+            ConcertsListView(viewModel: viewModel)
+                .tabItem {
+                    Label("Recent", systemImage: "bolt.fill")
+                }
+            
+            Text("Profile Page Placeholder")
+                .tabItem {
+                    Label("Profile", systemImage: "person.crop.circle")
+                }
+        }
     }
 }
