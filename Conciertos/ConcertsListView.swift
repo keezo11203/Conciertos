@@ -41,33 +41,3 @@ struct ConcertsListView: View {
     }
 }
 
-struct ConcertRow: View {
-    var concert: Concert
-    var isUpcoming: Bool
-
-    var body: some View {
-        HStack {
-            VStack(alignment: .leading) {
-                Text(concert.artist).font(.headline)
-                Text(concert.tourName).font(.subheadline)
-                Text(concert.venue)
-                Text("Date: \(concert.date, formatter: itemFormatter)")
-            }
-            Spacer()
-            if isUpcoming {
-                Image(systemName: "star.fill")
-                    .foregroundColor(.yellow)
-            }
-        }
-        .padding()
-        .background(isUpcoming ? Color.blue.opacity(0.2) : Color.gray.opacity(0.2))
-        .cornerRadius(10)
-    }
-}
-
-private let itemFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .long
-    formatter.timeStyle = .none
-    return formatter
-}()
