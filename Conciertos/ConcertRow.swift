@@ -34,17 +34,17 @@ struct ConcertRow: View {
         }
         .actionSheet(isPresented: $showingActionSheet) {
             ActionSheet(
-                title: Text("\(concert.artist) - \(concert.tourName)"), // Title combines artist and tour name
-                message: Text("Choose an action"), // General prompt for actions
+                title: Text("\(concert.artist) - \(concert.tourName)"),
+                message: Text("Choose an action"),
                 buttons: [
                     .default(Text("View Artist")) {
-                        print("Viewing details for \(concert.artist)")
+                        // Implement action for viewing artist details
                     },
                     .default(Text("View Tour Details")) {
-                        print("Viewing details for \(concert.tourName)")
+                        // Implement action for viewing tour details
                     },
                     .default(Text("View Venue Details")) {
-                        print("Viewing details at \(concert.venue)")
+                        // Implement action for viewing venue details
                     },
                     .cancel()
                 ]
