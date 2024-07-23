@@ -12,8 +12,6 @@ struct AddConcertView: View {
     @ObservedObject var viewModel: ConcertsViewModel
     @State private var artist = ""
     @State private var tourName = ""
-    @State private var city = ""
-    @State private var state = ""
     @State private var venue = ""
     @State private var date = Date()
 
@@ -21,19 +19,15 @@ struct AddConcertView: View {
         Form {
             TextField("Artist", text: $artist)
             TextField("Tour Name", text: $tourName)
-            TextField("City", text: $city)
-            TextField("State", text: $state)
             TextField("Venue", text: $venue)
             DatePicker("Date", selection: $date, displayedComponents: .date)
             Button("Save Concert") {
-                let newConcert = Concert(artist: artist, tourName: tourName, city: city, state: state, venue: venue, date: date)
+                let newConcert = Concert(artist: artist, tourName: tourName, venue: venue, date: date)
                 viewModel.addConcert(newConcert)
                 
                 // Clear the form fields after saving
                 artist = ""
                 tourName = ""
-                city = ""
-                state = ""
                 venue = ""
                 date = Date()  // Reset to current date
             }

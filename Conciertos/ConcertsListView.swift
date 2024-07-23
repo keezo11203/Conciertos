@@ -11,47 +11,63 @@ import SwiftUI
 struct ConcertsListView: View {
     @ObservedObject var viewModel: ConcertsViewModel
     @State private var searchText = ""
-    @State private var isSortedDescending = true
 
     var body: some View {
         NavigationView {
-            List(filteredAndSortedConcerts) { concert in
-                VStack(alignment: .leading) {
-                    Text(concert.artist).font(.headline)
-                    Text(concert.tourName)
-                    Text("\(concert.city), \(concert.state) - \(concert.venue)")
-                    Text("Date: \(concert.date, formatter: itemFormatter)")
+            List {
+                Section(header: Text("Upcoming Concerts")) {
+                    ForEach(upcomingConcerts) { concert in
+                        ConcertRow(concert: concert, isUpcoming: true)
+                    }
                 }
-            }
-            .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
-            .navigationBarTitle("Recent Concerts")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        isSortedDescending.toggle()
-                    }) {
-                        Image(systemName: isSortedDescending ? "arrow.up.arrow.down.circle.fill" : "arrow.down.arrow.up.circle.fill")
+
+                Section(header: Text("Past Concerts")) {
+                    ForEach(pastConcerts) { concert in
+                        ConcertRow(concert: concert, isUpcoming: false)
                     }
                 }
             }
+            .searchable(text: $searchText)
+            .navigationBarTitle("Concerts")
         }
     }
 
-    private var filteredAndSortedConcerts: [Concert] {
-        let filtered = searchText.isEmpty ? viewModel.concerts : viewModel.concerts.filter { concert in
-            concert.artist.lowercased().contains(searchText.lowercased()) ||
-            concert.city.lowercased().contains(searchText.lowercased()) ||
-            concert.tourName.lowercased().contains(searchText.lowercased())
-        }
-        return filtered.sorted {
-            isSortedDescending ? $0.date > $1.date : $0.date < $1.date
-        }
+    private var upcomingConcerts: [Concert] {
+        viewModel.concerts.filter { $0.date >= Date() }.sorted { $0.date < $1.date }
     }
 
-    private let itemFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .long
-        formatter.timeStyle = .none
-        return formatter
-    }()
+    private var pastConcerts: [Concert] {
+        viewModel.concerts.filter { $0.date < Date() }.sorted { $0.date > $1.date }
+    }
 }
+
+struct ConcertRow: View {
+    var concert: Concert
+    var isUpcoming: Bool
+
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading) {
+                Text(concert.artist).font(.headline)
+                Text(concert.tourName).font(.subheadline)
+                Text(concert.venue)
+                Text("Date: \(concert.date, formatter: itemFormatter)")
+            }
+            Spacer()
+            if isUpcoming {
+                Image(systemName: "star.fill")
+                    .foregroundColor(.yellow)
+            }
+        }
+        .padding()
+        .background(isUpcoming ? Color.blue.opacity(0.2) : Color.gray.opacity(0.2))
+        .cornerRadius(10)
+    }
+}
+
+private let itemFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.dateStyle = .long
+    formatter.timeStyle = .none
+    return formatter
+}()

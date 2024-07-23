@@ -11,8 +11,6 @@ struct Concert: Identifiable {
     let id = UUID()
     var artist: String
     var tourName: String
-    var city: String
-    var state: String
     var venue: String
     var date: Date
 }
