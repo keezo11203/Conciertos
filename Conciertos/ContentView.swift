@@ -22,7 +22,7 @@ struct ContentView: View {
                     Label("Recent", systemImage: "bolt.fill")
                 }
             
-            Text("Profile Page Placeholder")
+            UserProfileView() // No viewModel passed
                 .tabItem {
                     Label("Profile", systemImage: "person.crop.circle")
                 }
