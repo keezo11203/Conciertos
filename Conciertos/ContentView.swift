@@ -19,10 +19,10 @@ struct ContentView: View {
             
             ConcertsListView(viewModel: viewModel)
                 .tabItem {
-                    Label("Recent", systemImage: "bolt.fill")
+                    Label("Activity", systemImage: "bolt.fill")
                 }
             
-            UserProfileView() // No viewModel passed
+            UserProfileView(viewModel: viewModel) 
                 .tabItem {
                     Label("Profile", systemImage: "person.crop.circle")
                 }

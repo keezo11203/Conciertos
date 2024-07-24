@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct AddConcertView: View {
-    @ObservedObject var viewModel: ConcertsViewModel
+    @ObservedObject var viewModel: ConcertsViewModel  // Ensuring it's an ObservedObject
     @State private var artist = ""
     @State private var tourName = ""
     @State private var venue = ""
@@ -22,16 +22,20 @@ struct AddConcertView: View {
             TextField("Venue", text: $venue)
             DatePicker("Date", selection: $date, displayedComponents: .date)
             Button("Save Concert") {
-                let newConcert = Concert(artist: artist, tourName: tourName, venue: venue, date: date)
-                viewModel.addConcert(newConcert)
+                let isUpcoming = date > Date()
+                let newConcert = Concert(artist: artist, tourName: tourName, venue: venue, date: date, isUpcoming: isUpcoming)
+                viewModel.addConcert(newConcert)  // Direct call to viewModel's method
                 
-                // Clear the form fields after saving
+                // Reset form fields
                 artist = ""
                 tourName = ""
                 venue = ""
-                date = Date()  // Reset to current date
+                date = Date()
             }
         }
         .navigationTitle("Add Concert")
     }
 }
+
+
+

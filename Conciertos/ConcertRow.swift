@@ -10,52 +10,15 @@ import SwiftUI
 
 struct ConcertRow: View {
     var concert: Concert
-    var isUpcoming: Bool
-    @State private var showingActionSheet = false
 
     var body: some View {
-        HStack {
-            VStack(alignment: .leading) {
-                Text(concert.artist).font(.headline)
-                Text(concert.tourName).font(.subheadline)
-                Text(concert.venue)
-                Text("Date: \(concert.date, formatter: itemFormatter)")
+        VStack(alignment: .leading) {
+            Text(concert.artist).font(.headline)
+            Text(concert.tourName).font(.subheadline)
+            Text("At \(concert.venue) on \(concert.date.formatted())")
+            if concert.isUpcoming {
+                Text("Upcoming").foregroundColor(.blue)
             }
-            Spacer()
-            if isUpcoming {
-                Image(systemName: "star.fill").foregroundColor(.yellow)
-            }
-        }
-        .padding()
-        .background(isUpcoming ? Color.blue.opacity(0.2) : Color.gray.opacity(0.2))
-        .cornerRadius(10)
-        .onTapGesture {
-            showingActionSheet = true
-        }
-        .actionSheet(isPresented: $showingActionSheet) {
-            ActionSheet(
-                title: Text("\(concert.artist) - \(concert.tourName)"),
-                message: Text("Choose an action"),
-                buttons: [
-                    .default(Text("View Artist")) {
-                        // Implement action for viewing artist details
-                    },
-                    .default(Text("View Tour Details")) {
-                        // Implement action for viewing tour details
-                    },
-                    .default(Text("View Venue Details")) {
-                        // Implement action for viewing venue details
-                    },
-                    .cancel()
-                ]
-            )
         }
     }
 }
-
-private let itemFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .long
-    formatter.timeStyle = .none
-    return formatter
-}()
