@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct AddConcertView: View {
-    @ObservedObject var viewModel: ConcertsViewModel  // Ensuring it's an ObservedObject
+    @ObservedObject var viewModel: ConcertsViewModel
     @State private var artist = ""
     @State private var tourName = ""
     @State private var venue = ""
@@ -24,8 +24,8 @@ struct AddConcertView: View {
             Button("Save Concert") {
                 let isUpcoming = date > Date()
                 let newConcert = Concert(artist: artist, tourName: tourName, venue: venue, date: date, isUpcoming: isUpcoming)
-                viewModel.addConcert(newConcert)  // Direct call to viewModel's method
-                
+                viewModel.addConcert(newConcert)
+
                 // Reset form fields
                 artist = ""
                 tourName = ""
@@ -36,6 +36,3 @@ struct AddConcertView: View {
         .navigationTitle("Add Concert")
     }
 }
-
-
-

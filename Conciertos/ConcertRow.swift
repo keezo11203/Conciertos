@@ -15,10 +15,11 @@ struct ConcertRow: View {
         VStack(alignment: .leading) {
             Text(concert.artist).font(.headline)
             Text(concert.tourName).font(.subheadline)
-            Text("At \(concert.venue) on \(concert.date.formatted())")
+            Text("At \(concert.venue) on \(concert.date.formatted(date: .abbreviated, time: .omitted))")
             if concert.isUpcoming {
                 Text("Upcoming").foregroundColor(.blue)
             }
         }
     }
 }
+

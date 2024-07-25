@@ -16,13 +16,11 @@ struct ContentView: View {
                 .tabItem {
                     Label("Add", systemImage: "plus")
                 }
-            
             ConcertsListView(viewModel: viewModel)
                 .tabItem {
                     Label("Activity", systemImage: "bolt.fill")
                 }
-            
-            UserProfileView(viewModel: viewModel) 
+            UserProfileView(viewModel: viewModel)
                 .tabItem {
                     Label("Profile", systemImage: "person.crop.circle")
                 }
