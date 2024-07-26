@@ -11,7 +11,7 @@ class ConcertsViewModel: ObservableObject {
     @Published var concerts: [Concert] = []
     @Published var username: String = "Default User"
     @Published var bio: String = "This is a bio."
-    @Published var favoriteAlbums: [String] = ["Album 1", "Album 2", "Album 3"]
+    @Published var favoriteAlbums: [String] = ["", "", ""]
     @Published var lastSeenArtist: String = ""
     @Published var upcomingArtist: String = ""
     @Published var favoriteArtistSeenLive: String = ""  
