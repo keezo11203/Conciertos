@@ -27,53 +27,12 @@ struct ProfileHeader: View {
     }
 }
 
-struct FavoritesSection: View {
-    var favoriteAlbums: [String]
-
-    var body: some View {
-        VStack(alignment: .leading) {
-            Text("Favorite Albums")
-                .font(.headline)
-                .padding(.leading)
-            
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 20) {
-                    ForEach(favoriteAlbums, id: \.self) { album in
-                        VStack {
-                            Image(systemName: "photo.on.rectangle.angled") // Placeholder for album art
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 120, height: 120)
-                                .background(Color.gray.opacity(0.3)) // Light gray background for the image
-                                .cornerRadius(8)
-                                .clipped()
-
-                            Text(album)
-                                .font(.caption)
-                                .foregroundColor(.primary)
-                                .multilineTextAlignment(.center)
-                                .frame(width: 120) // Ensure the text is centered and wrapped within the image width
-                                .lineLimit(2) // Limit text to two lines
-                        }
-                        .padding(.vertical, 10)
-                        .background(Color.white) // Background color of the card
-                        .cornerRadius(10) // Rounded corners for the card
-                        .shadow(radius: 5) // Shadow for a 3D effect
-                        .padding(.leading, 10)
-                    }
-                }
-                .padding(.horizontal)
-            }
-        }
-    }
-}
-
 struct RecentConcertsView: View {
     var concerts: [Concert]
 
     var body: some View {
         VStack(alignment: .leading) {
-            Text("Recent Concerts").font(.headline)
+            Text("Recent Concerts").font(.headline).padding()
             ForEach(concerts) { concert in
                 Text("\(concert.artist) - \(concert.date.formatted(date: .abbreviated, time: .omitted))")
             }
@@ -82,14 +41,43 @@ struct RecentConcertsView: View {
     }
 }
 
-struct LastSeenLiveView: View {
-    var artist: String
+
+struct ArtistView: View {
+    var artistName: String
+    var artistImage: Image
 
     var body: some View {
-        Text("Last Seen Live: \(artist)").padding()
+        VStack {
+            artistImage
+                .resizable()
+                .scaledToFit()
+                .frame(width: 100, height: 100)
+                .clipShape(Circle())
+                .overlay(Circle().stroke(Color.white, lineWidth: 4))
+            Text(artistName)
+                .font(.caption)
+        }
     }
 }
 
+struct FavoriteArtistView: View {
+    var artistName: String
+    var artistImage: Image
+
+    var body: some View {
+        VStack {
+            Text("Favorite Artist Seen Live").font(.headline)
+            artistImage
+                .resizable()
+                .scaledToFit()
+                .frame(width: 100, height: 100)
+                .clipShape(Circle())
+                .overlay(Circle().stroke(Color.gray, lineWidth: 1))
+            Text(artistName).font(.headline)
+        }
+        .padding()
+    }
+}
 
 struct FavoritesAlbumsGrid: View {
     var favoriteAlbums: [String]
@@ -126,40 +114,37 @@ struct FavoritesAlbumsGrid: View {
     }
 }
 
-
-struct ArtistView: View {
-    var artistName: String
-    var artistImage: Image?  // Make it optional to handle cases where the image might not be set
-
-    var body: some View {
-        VStack {
-            (artistImage ?? Image(systemName: "person.circle.fill"))  // Using a system image as a placeholder
-                .resizable()
-                .scaledToFit()
-                .frame(width: 100, height: 100)
-                .clipShape(Circle())
-                .overlay(Circle().stroke(Color.white, lineWidth: 4))
-            Text(artistName)
-                .font(.caption)
-        }
-    }
-}
-
 struct UserProfileView: View {
     @ObservedObject var viewModel: ConcertsViewModel
     @State private var profileImage = Image(systemName: "person.circle")  // Using a system image as a placeholder for the profile picture
 
     var body: some View {
         ScrollView {
-            VStack {
+            VStack(spacing: 20) {
                 ProfileHeader(profileImage: profileImage, username: viewModel.username, bio: viewModel.bio)
                 FavoritesAlbumsGrid(favoriteAlbums: viewModel.favoriteAlbums)
-                HStack(spacing: 40) {
-                    ArtistView(artistName: "Last Seen: \(viewModel.lastSeenArtist)", artistImage: nil)  // No artistImage provided, will use placeholder
-                    ArtistView(artistName: "Upcoming: \(viewModel.upcomingArtist)", artistImage: nil)  // No artistImage provided, will use placeholder
+                
+                // Concerts Section
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("Concerts")
+                        .font(.headline)
+                        .padding(.bottom, 5)
+
+                    // Last Seen and Upcoming artists
+                    HStack(spacing: 40) {
+                        ArtistView(artistName: "Last Seen: \(viewModel.lastSeenArtist)", artistImage: Image(systemName: "person.crop.circle"))  // Assuming placeholder
+                        ArtistView(artistName: "Upcoming: \(viewModel.upcomingArtist)", artistImage: Image(systemName: "person.crop.circle"))  // Assuming placeholder
+                    }
+
+                    // Favorite Artist Seen Live
+                    FavoriteArtistView(artistName: viewModel.favoriteArtistSeenLive, artistImage: Image(systemName: "star.fill"))
                 }
-                .padding(.top, 20)
+                .padding()
+                .background(Color(UIColor.systemBackground))
+                .cornerRadius(10)
+                .shadow(radius: 5)
             }
+            .padding()
         }
         .navigationBarTitle("Profile", displayMode: .inline)
     }
